@@ -38,13 +38,11 @@ pub fn rollover<W: Write>(
 
 fn load_carryover_tasks(path: &Path) -> Result<Vec<Task>, Error> {
     let prev = LogFile::load(path)?;
-    let mut tasks = Vec::new();
-    prev.tasks().iter().for_each(|t| {
-        if let TaskStatus::ToDo | TaskStatus::Started | TaskStatus::Blocked = t.status() {
-            tasks.push(t.clone());
-        }
-    });
-    Ok(tasks)
+    Ok(prev.tasks().iter().filter_map(|t| if let TaskStatus::ToDo | TaskStatus::Started | TaskStatus::Blocked = t.status() {
+        Some(t.clone())
+    } else {
+        None
+    }).collect())
 }
 
 fn create_new_logfile(next_path: &Path, tasks: &[Task]) -> Result<(), Error> {

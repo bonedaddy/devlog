@@ -70,7 +70,7 @@ fn print_status_report<W: Write>(w: &mut W, g: &GroupedTasks, d: DisplayMode) ->
     for status in ALL_STATUSES {
         if d.show_status(status) {
             let tasks = g.retrieve(status);
-            if tasks.len() > 0 {
+            if !tasks.is_empty() {
                 if has_prev {
                     write!(w, "\n")?;
                 }
@@ -108,10 +108,10 @@ struct GroupedTasks {
 impl GroupedTasks {
     fn new() -> GroupedTasks {
         GroupedTasks {
-            todo: Vec::new(),
-            started: Vec::new(),
-            blocked: Vec::new(),
-            done: Vec::new(),
+            todo: Vec::with_capacity(4),
+            started: Vec::with_capacity(4),
+            blocked: Vec::with_capacity(4),
+            done: Vec::with_capacity(4),
         }
     }
 
