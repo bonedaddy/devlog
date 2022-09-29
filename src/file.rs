@@ -17,8 +17,20 @@ impl LogFile {
         let f = File::open(path)?;
         let r = BufReader::new(f);
         let mut tasks = Vec::new();
-        for line in r.lines() {
-            if let Some(task) = Task::from_string(&line?) {
+        let mut start_free_form = false;
+        for line in r.lines().flatten() {
+            // if the line starts with ``` then assume its
+            // a code block, and therefore exempt from devlog
+            // formatting rules
+            if line.starts_with("```") {
+                // just set the inverse of the boolean
+                // false -> true | true -> false
+                start_free_form = !start_free_form;
+                continue;
+            } else if start_free_form {
+                continue;
+            }
+            if let Some(task) = Task::from_string(&line) {
                 tasks.push(task)
             }
         }
