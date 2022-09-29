@@ -4,11 +4,11 @@ use dirs;
 use std::env;
 use std::path::{Path, PathBuf};
 
-const DEVLOG_REPO_ENV_VAR: &'static str = "DEVLOG_REPO";
-const DEFAULT_HOME_DIR: &'static str = "devlogs";
-const DEVLOG_EDITOR_ENV_VAR: &'static str = "DEVLOG_EDITOR";
-const EDITOR_ENV_VAR: &'static str = "EDITOR";
-const DEFAULT_EDITOR: &'static str = "nano";
+const DEVLOG_REPO_ENV_VAR: &str = "DEVLOG_REPO";
+const DEFAULT_HOME_DIR: &str = "devlogs";
+const DEVLOG_EDITOR_ENV_VAR: &str = "DEVLOG_EDITOR";
+const EDITOR_ENV_VAR: &str = "EDITOR";
+const DEFAULT_EDITOR: &str = "nano";
 
 pub struct Config {
     repo_dir: PathBuf,

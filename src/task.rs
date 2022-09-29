@@ -53,22 +53,22 @@ impl Task {
     /// is the content of the task.  Returns `None` if the string is not a valid task.
     pub fn from_string(s: &str) -> Option<Task> {
         let parse_content = |s: &str| s[1..].trim().to_string();
-        if s.starts_with("*") {
+        if s.starts_with('*') {
             Some(Task {
                 status: TaskStatus::ToDo,
                 content: parse_content(s),
             })
-        } else if s.starts_with("^") {
+        } else if s.starts_with('^') {
             Some(Task {
                 status: TaskStatus::Started,
                 content: parse_content(s),
             })
-        } else if s.starts_with("+") {
+        } else if s.starts_with('+') {
             Some(Task {
                 status: TaskStatus::Done,
                 content: parse_content(s),
             })
-        } else if s.starts_with("-") {
+        } else if s.starts_with('-') {
             Some(Task {
                 status: TaskStatus::Blocked,
                 content: parse_content(s),

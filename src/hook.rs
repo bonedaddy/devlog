@@ -11,7 +11,7 @@ use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-const HOOK_DIR_NAME: &'static str = "hooks";
+const HOOK_DIR_NAME: &str = "hooks";
 
 /// Defines the types of hooks a user can configure.
 pub enum HookType {
@@ -54,7 +54,7 @@ const ALL_HOOK_TYPES: &[HookType] = &[
     HookType::AfterRollover,
 ];
 
-const HOOK_TEMPLATE: &'static str = "#!/usr/bin/env sh
+const HOOK_TEMPLATE: &str = "#!/usr/bin/env sh
 # To enable this hook, make this file executable.
 echo \"$0 $@\"
 ";
@@ -94,7 +94,7 @@ pub fn execute_hook<W: Write>(
         let status = cmd.args(args).status()?;
         if !status.success() {
             if let Some(code) = status.code() {
-                write!(w, "{} hook exited with status {}\n", hook_type.name(), code)?;
+                writeln!(w, "{} hook exited with status {}", hook_type.name(), code)?;
             }
         }
     }

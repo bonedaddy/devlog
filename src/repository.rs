@@ -7,7 +7,7 @@ use std::fs::{create_dir_all, read_dir, OpenOptions};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-const HELP_MSG: &'static str = "Welcome to your devlog!
+const HELP_MSG: &str = "Welcome to your devlog!
 
 You can add tasks below using this format:
 * Use an asterisk (*) for each task you want to complete today.
@@ -48,7 +48,7 @@ impl LogRepository {
 
     /// Checks if the repository has been initialized.
     pub fn initialized(&self) -> Result<bool, Error> {
-        Ok(self.dir.exists() && self.list()?.len() > 0)
+        Ok(self.dir.exists() && !self.list()?.is_empty())
     }
 
     /// Initializes the repository.
@@ -66,7 +66,7 @@ impl LogRepository {
             .create_new(true)
             .open(p.path())?;
 
-        write!(&mut f, "{}\n", HELP_MSG)?;
+        writeln!(&mut f, "{}", HELP_MSG)?;
 
         Ok(p)
     }
@@ -102,7 +102,7 @@ impl LogRepository {
             }
         }
 
-        return Ok(result);
+        Ok(result)
     }
 
     /// Returns the most recent devlog entry file path,
