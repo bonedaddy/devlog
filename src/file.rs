@@ -60,10 +60,10 @@ mod tests {
             .create(true)
             .open(&p)
             .unwrap();
-        write!(f, "+ DONE\n").unwrap();
-        write!(f, "- BLOCKED\n").unwrap();
-        write!(f, "* INCOMPLETE\n").unwrap();
-        write!(f, "COMMENT\n").unwrap();
+        writeln!(f, "+ DONE").unwrap();
+        writeln!(f, "- BLOCKED").unwrap();
+        writeln!(f, "* INCOMPLETE").unwrap();
+        writeln!(f, "COMMENT").unwrap();
 
         let lf = LogFile::load(&p).unwrap();
         let expected = vec![

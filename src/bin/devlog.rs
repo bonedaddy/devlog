@@ -7,12 +7,12 @@ use std::fs::File;
 use std::io::{copy, stdin, stdout, Write};
 use std::process::exit;
 
-const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 
-const MAIN_INFO: &'static str =
+const MAIN_INFO: &str =
     "Devlog files are created in the directory at $DEVLOG_REPO, which defaults to $HOME/devlogs if not set.";
 
-const EDIT_INFO: &'static str =
+const EDIT_INFO: &str =
     "Uses the editor program $DEVLOG_EDITOR, which defaults to nano if not set.";
 
 fn main() -> Result<(), Error> {
@@ -141,13 +141,13 @@ fn init_cmd<W: Write>(w: &mut W, m: &ArgMatches) -> Result<(), Error> {
     let repo = LogRepository::new(config.repo_dir());
     initialize_if_necessary(w, &repo, m).and_then(|created| {
         if created {
-            write!(
+            writeln!(
                 w,
-                "Success!  Now you can open your devlog using `devlog edit`\n",
+                "Success!  Now you can open your devlog using `devlog edit`",
             )
             .map_err(From::from)
         } else {
-            write!(w, "Devlog repository already exists at {:?}\n", repo.path()).map_err(From::from)
+            writeln!(w, "Devlog repository already exists at {:?}", repo.path()).map_err(From::from)
         }
     })
 }
@@ -174,14 +174,14 @@ fn rollover_cmd<W: Write>(w: &mut W, m: &ArgMatches) -> Result<(), Error> {
             Some(p) => {
                 if prompt_confirm(w, "Rollover incomplete tasks?", m)? {
                     let (logpath, count) = rollover::rollover(w, &config, &p)?;
-                    write!(w, "Imported {} tasks into {:?}\n", count, logpath.path())?;
+                    writeln!(w, "Imported {} tasks into {:?}", count, logpath.path())?;
                 }
                 Ok(())
             }
             None => {
                 // This will only occur if something deleted the repo
                 // right after we checked that it was initialized (unlikely)
-                write!(w, "Could not find devlog file to rollover\n")?;
+                writeln!(w, "Could not find devlog file to rollover")?;
                 exit(1)
             }
         }

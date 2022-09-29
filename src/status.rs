@@ -70,9 +70,9 @@ fn print_status_report<W: Write>(w: &mut W, g: &GroupedTasks, d: DisplayMode) ->
     for status in ALL_STATUSES {
         if d.show_status(status) {
             let tasks = g.retrieve(status);
-            if tasks.len() > 0 {
+            if !tasks.is_empty() {
                 if has_prev {
-                    write!(w, "\n")?;
+                    writeln!(w)?;
                 }
                 print_section(w, status, tasks, d)?;
                 has_prev = true;
@@ -90,10 +90,10 @@ fn print_section<W: Write>(
     d: DisplayMode,
 ) -> Result<(), Error> {
     if d.show_section_names() {
-        write!(w, "{}:\n", status.display_name())?;
+        writeln!(w, "{}:", status.display_name())?;
     }
     for t in tasks {
-        write!(w, "{}\n", t)?;
+        writeln!(w, "{}", t)?;
     }
     Ok(())
 }
@@ -108,10 +108,10 @@ struct GroupedTasks {
 impl GroupedTasks {
     fn new() -> GroupedTasks {
         GroupedTasks {
-            todo: Vec::new(),
-            started: Vec::new(),
-            blocked: Vec::new(),
-            done: Vec::new(),
+            todo: Vec::with_capacity(4),
+            started: Vec::with_capacity(4),
+            blocked: Vec::with_capacity(4),
+            done: Vec::with_capacity(4),
         }
     }
 
@@ -153,7 +153,7 @@ mod tests {
             .unwrap();
 
         for t in tasks {
-            write!(&mut f, "{}\n", t).unwrap();
+            writeln!(&mut f, "{}", t).unwrap();
         }
     }
 
@@ -171,7 +171,7 @@ mod tests {
         expected_status: &str,
     ) {
         let mut buf = Vec::new();
-        print(&mut buf, &repo, num_back, display_mode).unwrap();
+        print(&mut buf, repo, num_back, display_mode).unwrap();
         let actual_status = str::from_utf8(&buf).unwrap();
         assert_eq!(actual_status, expected_status);
     }
@@ -428,7 +428,7 @@ mod tests {
         // Create a new devlog file with only the "todo" task
         let p = repo.latest().unwrap().unwrap();
         let next = p.next().unwrap();
-        write_tasks_to_file(&next.path(), &[Task::new(TaskStatus::ToDo, "Bar")]);
+        write_tasks_to_file(next.path(), &[Task::new(TaskStatus::ToDo, "Bar")]);
 
         // check before the first logfile
         check_status(&repo, 2, DisplayMode::ShowAll, "");

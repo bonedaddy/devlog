@@ -24,15 +24,15 @@ fn open_in_editor<W: Write>(w: &mut W, config: &Config, path: &Path) -> Result<(
         Ok(())
     } else {
         match status.code() {
-            Some(code) => write!(
+            Some(code) => writeln!(
                 w,
-                "Command `{} {}` exited with status {}\n",
+                "Command `{} {}` exited with status {}",
                 prog,
                 path.to_string_lossy(),
                 code
             )
             .map_err(From::from),
-            None => write!(w, "Process terminated by signal\n").map_err(From::from),
+            None => writeln!(w, "Process terminated by signal").map_err(From::from),
         }
     }
 }

@@ -13,7 +13,12 @@ license = "MIT"
 exclude = ["docs/*"]
 
 [dependencies]
-chrono = "0.4.19"
-clap = "3.1.15"
-dirs = "4.0.0"
-tempfile = "3.3.0"
+chrono = "0.4.22"
+clap = "3.2"
+dirs = "4"
+tempfile = "3"
+[profile.release]
+opt-level = 3
+# enable source line debug info
+debug = 1
+
