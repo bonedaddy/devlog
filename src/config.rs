@@ -8,7 +8,7 @@ const DEVLOG_REPO_ENV_VAR: &str = "DEVLOG_REPO";
 const DEFAULT_HOME_DIR: &str = "devlogs";
 const DEVLOG_EDITOR_ENV_VAR: &str = "DEVLOG_EDITOR";
 const EDITOR_ENV_VAR: &str = "EDITOR";
-const DEFAULT_EDITOR: &str = "nano";
+const DEFAULT_EDITOR: &str = "vim";
 
 pub struct Config {
     repo_dir: PathBuf,
